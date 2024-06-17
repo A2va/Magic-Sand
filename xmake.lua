@@ -18,3 +18,8 @@ target("magic")
         end
     end)
 
+    after_install(function (target) 
+        local installdir = assert(target:installdir(), "please use `xmake install -o installdir` or `set_installdir` to set install directory on windows.")
+        os.cp("bin/data", path.join(installdir, "bin"))
+    end)
+
