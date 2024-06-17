@@ -1,0 +1,12 @@
+package("videoinput")
+    set_homepage("https://github.com/ofTheo/videoInput")
+    set_description("A video capture library for windows")
+
+    set_urls("https://github.com/ofTheo/videoInput.git")
+    add_versions("2024.05.17", "261bfeee7c91810a46a5313ad7e2c298fc8732e5")
+    add_deps("cmake")
+    on_install("windows", function (package) 
+        os.cp("videoInputSrcAndDemos/libs/videoInput/*", ".")
+        import("package.tools.cmake").install(package)
+        os.cp("videoInput.h", package:installdir("include"))
+    end)

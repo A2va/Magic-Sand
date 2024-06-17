@@ -1,3 +1,13 @@
+
+Fork of Magic Sand to make it easy to compile with the [xmake](https://xmake.io/) build system. You can compile it by running (the MD runtime is needed by libfreenect, I have not actually tested if this will compile on anything other than Windows)
+
+```
+xmake f --runtimes=MD
+xmake
+```
+
+---
+
 # Magic Sand
 Magic Sand is a software for operating an augmented reality sandbox like this one:
 
