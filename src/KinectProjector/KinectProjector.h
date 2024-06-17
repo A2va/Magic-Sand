@@ -25,6 +25,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #define __GreatSand__KinectProjector__
 
 #include <iostream>
+#include <memory>
+
 #include "ofMain.h"
 #include "ofxOpenCv.h"
 #include "ofxCv.h"
@@ -360,9 +362,9 @@ private:
 
     // GUI Modal window & interface
 	bool displayGui;
-    shared_ptr<ofxModalConfirm>   confirmModal;
-    shared_ptr<ofxModalAlert>   calibModal;
-    shared_ptr<ofxModalThemeProjKinect>   modalTheme;
+    std::shared_ptr<ofxModalConfirm>   confirmModal;
+    std::shared_ptr<ofxModalAlert>   calibModal;
+    std::shared_ptr<ofxModalThemeProjKinect>   modalTheme;
     ofxDatGui* gui;
 	ofxDatGui* StatusGUI;
 	std::string calibrationText;

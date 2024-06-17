@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 #include "KinectProjector.h"
 #include <sstream>
+#include <algorithm>
 
 using namespace ofxCSG;
 
@@ -54,13 +55,13 @@ void KinectProjector::setup(bool sdisplayGui)
 	ofAddListener(ofEvents().exit, this, &KinectProjector::exit);
 
 	// instantiate the modal windows //
-    modalTheme = make_shared<ofxModalThemeProjKinect>();
-    confirmModal = make_shared<ofxModalConfirm>();
+    modalTheme = std::make_shared<ofxModalThemeProjKinect>();
+    confirmModal = std::make_shared<ofxModalConfirm>();
     confirmModal->setTheme(modalTheme);
     confirmModal->addListener(this, &KinectProjector::onConfirmModalEvent);
     confirmModal->setButtonLabel("Ok");
     
-    calibModal = make_shared<ofxModalAlert>();
+    calibModal = std::make_shared<ofxModalAlert>();
     calibModal->setTheme(modalTheme);
     calibModal->addListener(this, &KinectProjector::onCalibModalEvent);
     calibModal->setButtonLabel("Cancel");
@@ -530,11 +531,11 @@ void KinectProjector::updateROIFromCalibration()
 	ofVec2f b = worldCoordTokinectCoord(projCoordAndWorldZToWorldCoord(projRes.x, 0, basePlaneOffset.z));
 	ofVec2f c = worldCoordTokinectCoord(projCoordAndWorldZToWorldCoord(projRes.x, projRes.y, basePlaneOffset.z));
 	ofVec2f d = worldCoordTokinectCoord(projCoordAndWorldZToWorldCoord(0, projRes.y, basePlaneOffset.z));
-	float x1 = max(a.x, d.x);
-	float x2 = min(b.x, c.x);
-	float y1 = max(a.y, b.y);
-	float y2 = min(c.y, d.y);
-	ofRectangle smallKinectROI = ofRectangle(ofPoint(max(x1, kinectROI.getLeft()), max(y1, kinectROI.getTop())), ofPoint(min(x2, kinectROI.getRight()), min(y2, kinectROI.getBottom())));
+	float x1 = std::max(a.x, d.x);
+	float x2 = std::min(b.x, c.x);
+	float y1 = std::max(a.y, b.y);
+	float y2 = std::min(c.y, d.y);
+	ofRectangle smallKinectROI = ofRectangle(ofPoint(std::max(x1, kinectROI.getLeft()), std::max(y1, kinectROI.getTop())), ofPoint(std::min(x2, kinectROI.getRight()), std::min(y2, kinectROI.getBottom())));
 	kinectROI = smallKinectROI;
 
 	kinectROI.standardize();

@@ -21,6 +21,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 #include "vehicle.h"
 
+#include <algorithm>
+
 // Default value of static variable
 bool Vehicle::DrawFlipped = false;
 
@@ -230,7 +232,7 @@ void Vehicle::update(){
         angleChange += (angleChange > 180) ? -360 : (angleChange < -180) ? 360 : 0; // To take into account that the difference between -180 and 180 is 0 and not 360
         angleChange *= velocity.length();
         angleChange /= topSpeed;
-        angleChange = max(min(angleChange, maxRotation), -maxRotation);
+        angleChange = std::max(std::min(angleChange, maxRotation), -maxRotation);
         angle += angleChange;
     }
 }
