@@ -1395,9 +1395,6 @@ namespace std
         }
     };
 
-    /*!
-        Define std::less<vector<T,2> > so that you can use vector<T,2>s in the associative containers.
-    !*/
     template<typename T>
     struct less<dlib::vector<T, 2>>
     {
