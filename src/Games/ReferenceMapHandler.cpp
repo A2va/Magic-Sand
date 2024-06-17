@@ -116,66 +116,71 @@ void CReferenceMapHandler::PermuteMapOrder()
 
 bool CReferenceMapHandler::WriteToFile()
 {
-	std::string refName = "mapGame/ReferenceData/MapReferenceSettings.xml";
+    std::string refName = "mapGame/ReferenceData/MapReferenceSettings.xml";
 
-	ofXml XMLOut;
-	XMLOut.addChild("MapReferenceSettings");
-	XMLOut.setTo("MapReferenceSettings");
-	XMLOut.addValue("DefaultMap", 0);
+    ofXml xml;
+    auto mapReferenceSettings = xml.appendChild("MapReferenceSettings");
+	mapReferenceSettings.appendChild("DefaultMap").set<int>(0);
 
-	XMLOut.addChild("maps");
-	XMLOut.setTo("maps");
+    auto maps = mapReferenceSettings.appendChild("maps");
 
-	for (int i = 0; i < ReferenceMaps.size(); i++)
-	{
-		XMLOut.addChild("map");
-		XMLOut.setTo("map["+ ofToString(i) +"]");
-		XMLOut.setAttribute("id", ofToString(i));
-		XMLOut.addValue("MapName", ReferenceNames[i]);
-		XMLOut.addValue("GroundTruth", ReferenceMaps[i]);
-		XMLOut.setToParent();
-	}
+    for (int i = 0; i < ReferenceMaps.size(); i++)
+    {
+        auto map = maps.appendChild("map");
+        map.setAttribute("id", ofToString(i));
+		map.appendChild("MapName").set<string>(ReferenceNames[i]);
+		map.appendChild("GroundTruth").set<string>(ReferenceMaps[i]);
+    }
 
-	return XMLOut.save(refName);
+    return xml.save(refName);
 }
+
 
 
 bool CReferenceMapHandler::ReadFromFile()
 {
-	std::string refName = "mapGame/ReferenceData/MapReferenceSettings.xml";
+    std::string refName = "mapGame/ReferenceData/MapReferenceSettings.xml";
 
-	ReferenceNames.clear();
-	ReferenceMaps.clear();
+    ReferenceNames.clear();
+    ReferenceMaps.clear();
 
-	ofXml XMLIn;
-	if (!XMLIn.load(refName))
-	{
-		std::cout << "Could not read " << refName << std::endl;
-		return false;
+    ofXml xml;
+    if (!xml.load(refName))
+    {
+        std::cout << "Could not read " << refName << std::endl;
+        return false;
+    }
+
+    auto mapReferenceSettings = xml.getChild("MapReferenceSettings");
+    if (!mapReferenceSettings)
+        return false;
+
+    DefaultMap = mapReferenceSettings.getChild("DefaultMap").getValue<int>();
+    ActualMap = DefaultMap;
+
+    auto maps = mapReferenceSettings.getChild("maps");
+    if (!maps)
+        return false;
+
+	int numChildren = 0;
+	for (auto child: maps.getChildren()) {
+		numChildren++;
 	}
 
-	XMLIn.setTo("MapReferenceSettings");
+	ReferenceNames.resize(numChildren);
+	ReferenceMaps.resize(numChildren);
+	
+    for (auto map: maps.getChildren())
+    {
+        std::string rn = map.getChild("MapName").getValue<std::string>();
+        std::string rGT = map.getChild("GroundTruth").getValue<std::string>();
 
-	DefaultMap = XMLIn.getValue<int>("DefaultMap");
-	ActualMap = DefaultMap;
+		int id = map.getAttribute("id").getIntValue();
+        ReferenceNames[id] = rn;
+		ReferenceMaps[id] = rGT;
+    }
 
-	XMLIn.setTo("maps");
-
-	int nmaps = XMLIn.getNumChildren(); // how many do you have?
-
-	for (int i = 0; i < nmaps; i++)
-	{
-		XMLIn.setTo("map[" + ofToString(i) + "]");
-		std::string rn = XMLIn.getValue<string>("MapName");
-		std::string rGT = XMLIn.getValue<string>("GroundTruth");
-
-		ReferenceNames.push_back(rn);
-		ReferenceMaps.push_back(rGT);
-
-		XMLIn.setToParent();
-	}
-
-	return true;
+    return true;
 }
 
 void CReferenceMapHandler::SetCycleMode(int mode)

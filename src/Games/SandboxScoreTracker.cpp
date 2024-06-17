@@ -106,21 +106,19 @@ std::string CSandboxScoreTracker::getScoreImage(int idx)
 
 bool CSandboxScoreTracker::SaveScoresXML(std::string &fname)
 {
-	ofXml XMLOut;
-	XMLOut.addChild("scores");
-	XMLOut.setTo("scores");
+    ofXml xml;
+    auto scores = xml.appendChild("scores");
 
-	for (int i = 0; i < scores.size(); i++)
-	{
-		XMLOut.addChild("score");
-		XMLOut.setTo("score[" + ofToString(i) + "]");
-		XMLOut.setAttribute("id", ofToString(i));
-		XMLOut.addValue("value", scores[i]);
-		XMLOut.addValue("image", scoreImages[i]);
-		XMLOut.addValue("date", scoreDates[i]);
-		XMLOut.setToParent();
-	}
-	return XMLOut.save(fname);
+    for (int i = 0; i < this->scores.size(); i++)
+    {
+        auto score = scores.appendChild("score");
+        score.setAttribute("id", ofToString(i));
+		score.appendChild("value").set<int>(this->scores[i]);
+		score.appendChild("image").set<std::string>(this->scoreImages[i]);
+		score.appendChild("date").set<std::string>(this->scoreDates[i]);
+    }
+
+    return xml.save(fname);
 }
 
 bool CSandboxScoreTracker::LoadScoresXML(std::string &fname)
@@ -135,24 +133,30 @@ bool CSandboxScoreTracker::LoadScoresXML(std::string &fname)
 	scoreImages.clear();
 	scoreDates.clear();
 
-	XMLIn.setTo("scores");
+	auto scoresNode = XMLIn.getChild("scores");
+    if (!scoresNode)
+        return false;
 
-	int nscores = XMLIn.getNumChildren(); // how many do you have?
 
-	for (int i = 0; i < nscores; i++)
+	int numChildren = 0;
+	for (auto child: scoresNode.getChildren()) {
+		numChildren++;
+	}
+
+	scores.resize(numChildren);
+	scoreImages.resize(numChildren);
+	scoreDates.resize(numChildren);
+
+	for (auto score: scoresNode.getChildren())
 	{
-		if (XMLIn.setTo("score[" + ofToString(i) + "]"))
-		{
-			int tsc = XMLIn.getValue<int>("value");
-			std::string tI = XMLIn.getValue<string>("image");
-			std::string tD = XMLIn.getValue<string>("date");
+		int tsc = score.getChild("value").getValue<int>();
+		std::string tI = score.getChild("image").getValue<std::string>();
+		std::string tD = score.getChild("date").getValue<std::string>();
 
-			scores.push_back(tsc);
-			scoreImages.push_back(tI);
-			scoreDates.push_back(tD);
-
-			XMLIn.setToParent();
-		}
+		int id = score.getAttribute("id").getIntValue();
+		scores[id] = tsc;
+		scoreImages[id] = tI;
+		scoreDates[id] = tD;
 	}
 
 	return true;

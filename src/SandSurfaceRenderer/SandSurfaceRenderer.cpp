@@ -511,10 +511,15 @@ bool SandSurfaceRenderer::loadSettings(){
     ofXml xml;
     if (!xml.load(settingsFile))
         return false;
-    xml.setTo("SURFACERENDERERSETTINGS");
-    colorMapFile = xml.getValue<string>("colorMapFile");
-    drawContourLines = xml.getValue<bool>("drawContourLines");
-    contourLineDistance = xml.getValue<float>("contourLineDistance");
+
+    auto surface = xml.getChild("SURFACERENDERERSETTINGS");
+    if (!surface)
+        return false;
+
+
+    colorMapFile = surface.getChild("colorMapFile").getValue<std::string>();
+    drawContourLines = surface.getChild("drawContourLines").getValue<bool>();
+    contourLineDistance = surface.getChild("contourLineDistance").getValue<float>();
     
     return true;
 }
@@ -523,12 +528,11 @@ bool SandSurfaceRenderer::saveSettings(){
     string settingsFile = "settings/sandSurfaceRendererSettings.xml";
 
     ofXml xml;
-    xml.addChild("SURFACERENDERERSETTINGS");
-    xml.setTo("SURFACERENDERERSETTINGS");
-    xml.addValue("colorMapFile", colorMapFile);
-    xml.addValue("drawContourLines", drawContourLines);
-    xml.addValue("contourLineDistance", contourLineDistance);
-    xml.setToParent();
+    auto surface = xml.appendChild("SURFACERENDERERSETTINGS");
+    surface.appendChild("colorMapFile").set<std::string>(colorMapFile);
+    surface.appendChild("drawContourLines").set<bool>(drawContourLines);
+    surface.appendChild("contourLineDistance").set<float>(contourLineDistance);
+    
     return xml.save(settingsFile);
 }
 
