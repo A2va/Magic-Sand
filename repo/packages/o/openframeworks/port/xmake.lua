@@ -1,4 +1,4 @@
-add_modes("mode.debug", "mode.release")
+add_rules("mode.debug", "mode.release")
 
 add_requires("libfreenect", "libtess2")
 add_requires("opencv", "cairo", "freeimage") -- image

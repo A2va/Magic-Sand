@@ -7,6 +7,8 @@ package("libtess2")
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
+            add_rules("mode.debug", "mode.release")
+
             target("libtess2")
                 set_kind("$(kind)")
                 add_files("Source/*.c")
