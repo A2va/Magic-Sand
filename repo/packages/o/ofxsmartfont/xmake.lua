@@ -10,7 +10,7 @@ package("ofxsmartfont")
     add_deps("openframeworks")
 
     on_install(function (package) 
-        io.writefile("xmake.lua", [[$
+        io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             add_requires("openframeworks")
             set_languages("cxx17")

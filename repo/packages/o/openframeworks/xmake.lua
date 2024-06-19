@@ -13,7 +13,8 @@ package("openframeworks")
     add_deps("pugixml", "nlohmann_json") -- textual format
     add_deps("utfcpp", "uriparser", "libcurl")
     add_deps("videoinput", "glew", "glfw", "glm") -- video
-    add_deps("glut", {system = is_plat("macosx")})
+    -- add_deps("glut", {system = is_plat("macosx")})
+    add_deps("freeglut")
     add_deps("fmod", "openal-soft", "rtaudio", "kissfft", "libsndfile") -- audio
     
     add_defines("OF_USING_STD_FS", "OF_SOUND_PLAYER_OPENAL")

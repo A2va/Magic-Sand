@@ -5,7 +5,8 @@ add_requires("opencv", "cairo", "freeimage") -- image
 add_requires("pugixml", "nlohmann_json") -- textual format
 add_requires("utfcpp", "uriparser", "libcurl")
 add_requires("videoinput", "glew", "glfw", "glm") -- video
-add_requires("glut", {system = is_plat("macosx")})
+-- add_requires("glut", {system = is_plat("macosx")})
+add_requires("freeglut")
 add_requires("fmod", "openal-soft", "rtaudio", "kissfft", "libsndfile") -- audio
 
 if is_plat("linux") then
@@ -23,8 +24,9 @@ target("openframeworks")
 
     add_packages("libfreenect", "libtess2")
     add_packages("opencv", "cairo", "freeimage") -- image
+    add_packages("pugixml", "nlohmann_json")  -- textual format
     add_packages("utfcpp", "uriparser", "libcurl")
-    add_packages("videoinput", "glew", "glfw", "glm") -- video
+    add_packages("videoinput", "glew", "glfw", "glm", "freeglut") -- video
     add_packages("fmod", "openal-soft", "rtaudio", "kissfft", "libsndfile") -- audio
     
     -- main files
@@ -92,6 +94,7 @@ target("openframeworks")
             target:remove("headerfiles", "libs/openFrameworks/video/ofGstUtils.h", "libs/openFrameworks/video/ofGstVideoGrabber.h", "libs/openFrameworks/video/ofGstVideoGrabber.h")
         end
 
+        target:add("includedirs", "libs/openFrameworks")
         for _, dir in ipairs(os.dirs("libs/openFrameworks/*")) do
             if not dir:endswith(".settings") then
                 target:add("includedirs", dir)

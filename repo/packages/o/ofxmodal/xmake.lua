@@ -2,8 +2,8 @@ package("ofxmodal")
     set_homepage("https://github.com/braitsch/ofxModal")
     set_description("A flexible and extensible kit of Modal windows for openFrameworks")
 
-    set_urls("https://github.com/braitsch/ofxModal.git")
-    add_versions("2024.06.13", "71bfaa283407bbe58b921fd581d8665f21cf5eb8")
+    set_urls("https://github.com/braitsch/ofxModal/archive/refs/heads/master.zip")
+    add_versions("2024.06.13", "b752ac85eecc5a9dcc5087cab07b7cc7abf3eae3b7db35414efebbff6028a45f")
 
     add_deps("openframeworks", "ofxparagraph", "ofxdatgui")
 
