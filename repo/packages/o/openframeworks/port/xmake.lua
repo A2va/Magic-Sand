@@ -21,11 +21,11 @@ target("openframeworks")
         add_packages("gstreamer")
     end
 
-    add_requires("libfreenect", "libtess2")
-    add_requires("opencv", "cairo", "freeimage") -- image
-    add_requires("utfcpp", "uriparser", "libcurl")
-    add_requires("videoinput", "glew", "glfw", "glm") -- video
-    add_requires("fmod", "openal-soft", "rtaudio", "kissfft", "libsndfile") -- audio
+    add_packages("libfreenect", "libtess2")
+    add_packages("opencv", "cairo", "freeimage") -- image
+    add_packages("utfcpp", "uriparser", "libcurl")
+    add_packages("videoinput", "glew", "glfw", "glm") -- video
+    add_packages("fmod", "openal-soft", "rtaudio", "kissfft", "libsndfile") -- audio
     
     -- main files
     add_files("addons/ofxKinect/**.cpp")
